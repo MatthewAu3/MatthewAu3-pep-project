@@ -6,20 +6,10 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import Model.Account;
 import Model.Message;
 import Util.ConnectionUtil;
 
 public class MessageDAO {
-    /*
-     * Process new message creation
-     * Retrieve all messages
-     * Retrieve message by its ID
-     * Delete message by message ID
-     * Update message text by message ID
-     * Retrieve all messages written by a particular user
-     */
-
      public Message createNewMessage(Message message) {
         Connection connection = ConnectionUtil.getConnection();
         try {
@@ -38,28 +28,6 @@ public class MessageDAO {
             return searchForId(posted_by, message_text, epoch);
 
         }catch(SQLException e){
-            System.out.println(e.getMessage());
-        }
-        return null;
-     }
-
-     public Message getByPostedBy(int postedBy) {
-        Connection conn = ConnectionUtil.getConnection();
-        try {
-            String sql = "SELECT * FROM message WHERE posted_by = ?";
-            PreparedStatement ps = conn.prepareStatement(sql);
-
-            ps.setInt(1, postedBy);
-            ResultSet rs = ps.executeQuery();
-
-            while (rs.next()) {
-                Message message = new Message(rs.getInt("message_id"),
-                            rs.getInt("posted_by"),
-                            rs.getString("message_text"),
-                            rs.getLong("time_posted_epoch"));
-                return message;
-            }
-        } catch(SQLException e) {
             System.out.println(e.getMessage());
         }
         return null;
@@ -108,7 +76,7 @@ public class MessageDAO {
         return null;
     }
 
-    public Message deleteMessageById(int id) {
+    public void deleteMessageById(int id) {
         Connection conn = ConnectionUtil.getConnection();
         try {
             String sql = "DELETE FROM message WHERE message_id = ?";
@@ -118,13 +86,12 @@ public class MessageDAO {
             
             ps.executeUpdate();
 
-            return searchById(id);
+            //Message m = searchById(id);
 
-        }catch(SQLException e){
-                System.out.println(e.getMessage());
         }
-        return null;
-    }
+        catch(SQLException e){
+                System.out.println(e.getMessage());
+    }}
 
     public Message updateMessageById(int id, String newMessage) {
         Connection conn = ConnectionUtil.getConnection();

@@ -6,15 +6,6 @@ import java.util.List;
 
 import DAO.MessageDAO;
 
-/*
-     * Process new message creation
-     * Retrieve all messages
-     * Retrieve message by its ID
-     * Delete message by message ID
-     * Update message text by message ID
-     * Retrieve all messages written by a particular user
-     */
-
 public class MessageService {
     private MessageDAO messageDAO;
 
@@ -42,7 +33,9 @@ public class MessageService {
     }
 
     public Message deleteMessageById(int id) {
-        return messageDAO.deleteMessageById(id);
+        Message deletedMessage = messageDAO.searchById(id);
+        messageDAO.deleteMessageById(id);
+        return deletedMessage;
     }
 
     public Message updateMessageById(int id, String newMessage) {

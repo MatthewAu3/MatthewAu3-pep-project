@@ -16,8 +16,7 @@ public class AccountService {
 
     public Account processNewUser(Account account) {
         if (account.getUsername().length() > 0 &&
-         account.getPassword().length() >= 4 &&
-         accountDAO.searchByUsername(account.getUsername()) == null)
+         account.getPassword().length() >= 4)
             return accountDAO.processNewUser(account);
         return null;
     }

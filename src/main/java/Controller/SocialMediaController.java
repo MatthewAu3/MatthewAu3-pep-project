@@ -6,6 +6,7 @@ import java.util.List;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.exc.MismatchedInputException;
 
 import Model.Account;
 import Model.Message;
@@ -32,18 +33,6 @@ public class SocialMediaController {
         this.messageService = new MessageService();
     }
 
-    /*
-     * Process New User Registrations
-     * Process User Logins
-     */
-    /*
-     * Process new message creation
-     * Retrieve all messages
-     * Retrieve message by its ID
-     * Delete message by message ID
-     * Update message text by message ID
-     * Retrieve all messages written by a particular user
-     */
     public Javalin startAPI() {
         Javalin app = Javalin.create();
         app.post("/register", this::newUserHandler);
@@ -59,10 +48,6 @@ public class SocialMediaController {
         return app;
     }
 
-    /**
-     * This is an example handler for an example endpoint.
-     * @param context The Javalin Context object manages information about both the HTTP request and response.
-     */
     private void newUserHandler(Context ctx) throws JsonProcessingException {
         ObjectMapper mapper = new ObjectMapper();
         Account account = mapper.readValue(ctx.body(), Account.class);
@@ -106,11 +91,12 @@ public class SocialMediaController {
             ctx.json(message);
     }
     private void deleteMessageHandler(Context ctx) {
-        int id = Integer.parseInt(ctx.pathParam("message_id"));
+        int id = Integer.valueOf(ctx.pathParam("message_id"));
         Message message = messageService.deleteMessageById(id);
         if (message != null) {
             ctx.json(message);
         }
+        
     }
     private void updateMessageHandler(Context ctx) throws JsonProcessingException{
         int id = Integer.parseInt(ctx.pathParam("message_id"));
